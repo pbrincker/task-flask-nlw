@@ -15,17 +15,18 @@ def create_task():
     task_id_control += 1
     tasks.append(new_task)
     return jsonify({
-        "message": "Nova Tarefa criada com sucesso"
+        "message": "Nova Tarefa criada com sucesso",
+        "id": new_task.id
     })
 
 
 @app.route('/tasks', methods=['GET'])
 def list_tasks():
     task_list = [task.to_dict() for task in tasks]
-    output = [ {
+    output = {
         "tasks": task_list,
         "total_tasks": len(task_list)
-    }]
+    }
     return jsonify(output)
 
 
@@ -52,15 +53,15 @@ def edit_task(id):
         }), 404
     data = request.get_json()
     task.title = data.get('title')
-    task.title = data.get('description')
-    task.title = data.get('completed')
+    task.description = data.get('description')
+    task.completed = data.get('completed')
     print(task)
     return jsonify({
         "message": "Tarefa atualizada com sucesso"
     })
 
 
-@app.route('/tasks/<ind:id>', methods=['DETELE'])
+@app.route('/tasks/<int:id>', methods=['DELETE'])
 def delete_task(id):
     task = None
     for t in tasks:
